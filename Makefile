@@ -4,7 +4,8 @@ IN_CPP_DIR:=src
 OUT_O_DIR:=build
 
 programs= \
-	FSM.o
+	FSM.o \
+	State.o
 
 results=$(addprefix $(OUT_O_DIR)/,$(programs))
 
@@ -14,7 +15,7 @@ manual.pdf:
 	$(MAKE) -C manual
 
 $(OUT_O_DIR)/main: $(IN_CPP_DIR)/main.cpp $(results)
-	$(CC) $(CFLAGS) $< -o $@
+	$(CC) $(CFLAGS) $^ -o $@
 
 $(OUT_O_DIR)/%.o: $(IN_CPP_DIR)/%.cpp
 	mkdir -p $(OUT_O_DIR)
