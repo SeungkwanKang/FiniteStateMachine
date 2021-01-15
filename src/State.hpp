@@ -4,6 +4,7 @@
 #include <iostream>
 #include <string>
 #include <vector>
+#include <functional>
 
 #include "FSM.hpp"
 
@@ -22,7 +23,7 @@ private: // Identification
 	std::string sName;
 
 private: // Function Related
-	outT (*pFunc)(State<inT, outT>inT);
+	std::function<std::string(State<int, std::string> *, int)> *pFunc;
 	bool isLocked = false;
 
 private:
@@ -35,9 +36,9 @@ public:
 	State operator()(inT input);
 
 	void setName(std::string name);
-	void setFunction(outT (*func)(inT));
+	void setFunction(std::function<std::string(State<int, std::string> *, int)>*);
 
-	outT giveInput(inT input){ return pFunc(input); };
+	outT giveInput(inT input);
 };
 
 
@@ -74,7 +75,7 @@ State<inT, outT>::~State()
  * @return void / prints out error if locked
  */
 template <typename inT, typename outT>
-State<inT, outT>::setName(std::string name)
+void State<inT, outT>::setName(std::string name)
 {
 	if (!isLocked)
 		sName = name;
@@ -91,13 +92,19 @@ State<inT, outT>::setName(std::string name)
  * @return void / prints out error if locked
  */
 template <typename inT, typename outT>
-State<inT, outT>::setFunction(outT (*func)(inT))
+void State<inT, outT>::setFunction(std::function<std::string(State<int, std::string> *, int)> *func)
 {
 	if (!isLocked)
 		pFunc = func;
 	else
 		std::cerr << "The state is locked. You should not modify the state after FSM running." << std::endl;
 }
+
+template <typename inT, typename outT>
+outT State<inT, outT>::giveInput(inT input)
+{
+	return pFunc->operator()(this, input);
+};
 
 /*
  * calls the next state by key
@@ -108,12 +115,12 @@ State<inT, outT>::setFunction(outT (*func)(inT))
  * @return void / prints out error if parent not set
  */
 template <typename inT, typename outT>
-void callStateByKey(int key)
+void State<inT, outT>::callStateByKey(int key)
 {
 	if (pParent != NULL)
 		pParent->setNextStateByKey(key);
 	else
-		std::err << "Please load the state first." << std::endl;
+		std::cerr << "Please load the state first." << std::endl;
 	
 }
 
@@ -126,13 +133,13 @@ void callStateByKey(int key)
  * @return void / prints out error if parent not set
  */
 template <typename inT, typename outT>
-void callStateByName(std::string name)
+void State<inT, outT>::callStateByName(std::string name)
 {
 	{
 		if (pParent != NULL)
-			pParent->setNextStateByName(key);
+			pParent->setNextStateByName(name);
 		else
-			std::err << "Please load the state first." << std::endl;
+			std::cerr << "Please load the state first." << std::endl;
 	}
 }
 
