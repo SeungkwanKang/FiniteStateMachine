@@ -12,12 +12,22 @@ template <typename inT, typename outT> class FSM;
 template <typename inT, typename outT>
 class State
 {
-private:
+	friend FSM<inT, outT>;
+
+private: // Internals
 	State *pParent;
+
+private: // Identification
 	int iKey;
 	std::string sName;
-	outT (*pFunc)(inT);
+
+private: // Function Related
+	outT (*pFunc)(State<inT, outT>inT);
 	bool isLocked = false;
+
+private:
+	void callStateByKey(int key);
+	void callStateByName(std::string name);
 
 public:
 	State();
@@ -87,6 +97,43 @@ State<inT, outT>::setFunction(outT (*func)(inT))
 		pFunc = func;
 	else
 		std::cerr << "The state is locked. You should not modify the state after FSM running." << std::endl;
+}
+
+/*
+ * calls the next state by key
+ * 
+ * Checks whether the parent (FSM) is set and modifies its next state
+ * 
+ * @param integer value of key
+ * @return void / prints out error if parent not set
+ */
+template <typename inT, typename outT>
+void callStateByKey(int key)
+{
+	if (pParent != NULL)
+		pParent->setNextStateByKey(key);
+	else
+		std::err << "Please load the state first." << std::endl;
+	
+}
+
+/*
+ * calls the next state by name
+ * 
+ * Checks whether the parent (FSM) is set and modifies its next state
+ * 
+ * @param std::string value of name
+ * @return void / prints out error if parent not set
+ */
+template <typename inT, typename outT>
+void callStateByName(std::string name)
+{
+	{
+		if (pParent != NULL)
+			pParent->setNextStateByName(key);
+		else
+			std::err << "Please load the state first." << std::endl;
+	}
 }
 
 #endif // INCLUDE_STATE_H_
