@@ -8,7 +8,12 @@ template <typename inT, typename outT> class State;
 template <typename inT, typename outT>
 class FSM
 {
-	friend State<inT, outT>;
+	template <typename T1, typename T2>
+	friend class State;
+	template <typename T1, typename T2>
+	friend class State_Moore;
+	template <typename T1, typename T2>
+	friend class State_Mealy;
 
 private:
 	bool isLocked;

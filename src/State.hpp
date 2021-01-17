@@ -13,7 +13,12 @@ template <typename inT, typename outT> class FSM;
 template <typename inT, typename outT>
 class State
 {
-	friend FSM<inT, outT>;
+	template <typename T1, typename T2>
+	friend class FSM;
+	template <typename T1, typename T2>
+	friend class FSM_Moore;
+	template <typename T1, typename T2>
+	friend class FSM_Mealy;
 
 private: // Internals
 	State *pParent;
