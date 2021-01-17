@@ -45,6 +45,9 @@ public:
 template <typename inT, typename outT>
 FSM<inT, outT>::FSM()
 {
+#ifdef DEBUG_
+	std::cout << "[FSM] Constructor" << std::endl;
+#endif
 	isLocked = false;
 	pCurrState = nullptr;
 }
@@ -58,6 +61,9 @@ FSM<inT, outT>::FSM()
 template <typename inT, typename outT>
 FSM<inT, outT>::~FSM()
 {
+#ifdef DEBUG_
+	std::cout << "[FSM] Deconstructor" << std::endl;
+#endif
 }
 
 /*
@@ -119,6 +125,9 @@ outT FSM<inT, outT>::operator()(inT input)
 template <typename inT, typename outT>
 void FSM<inT, outT>::setNextStateByKey(int key)
 {
+#ifdef DEBUG_
+	std::cout << "[FSM] setNextStateByKey called: " << key << std::endl;
+#endif
 	pCurrState = vpState[key];
 }
 

@@ -55,6 +55,9 @@ public: // Initialization related
 template <typename inT, typename outT>
 State<inT, outT>::State()
 {
+#ifdef DEBUG_
+	std::cout << "[State] Constructor" << std::endl;
+#endif
 	iKey = -1;
 	sName = "";
 	isStartState = false;
@@ -70,7 +73,9 @@ State<inT, outT>::State()
 template <typename inT, typename outT>
 State<inT, outT>::~State()
 {
-	std::cout << "Deconstructor" << std::endl;
+#ifdef DEBUG_
+	std::cout << "[State] Deconstructor" << std::endl;
+#endif
 }
 
 /*
