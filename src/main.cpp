@@ -4,6 +4,7 @@
 
 int main(int argc, char *argv[])
 {
+	FSM<int, std::string> fsm;
 	State<int, std::string> s;
 
 	std::function<std::string(State<int, std::string>*, int)> f = \
@@ -16,8 +17,10 @@ int main(int argc, char *argv[])
 		};
 
 	s.setFunction(&f);
+	s.setAsStartState();
 
-	s.giveInput(3);
+	fsm.addState(&s);
+	fsm(3);
 
 	return 0;
 }

@@ -18,27 +18,26 @@ class State
 private: // Internals
 	State *pParent;
 
-private: // Identification
+private: // Identification related
 	int iKey;
 	std::string sName;
+	bool isStartState;
 
-private: // Function Related
+private: // Function related
 	std::function<std::string(State<int, std::string> *, int)> *pFunc;
 	bool isLocked = false;
 
-private:
+private: // Input related
+	outT giveInput(inT input);
 	void callStateByKey(int key);
 	void callStateByName(std::string name);
 
-public:
+public: // Initialization related
 	State();
 	~State();
-	State operator()(inT input);
-
 	void setName(std::string name);
-	void setFunction(std::function<std::string(State<int, std::string> *, int)>*);
-
-	outT giveInput(inT input);
+	void setFunction(std::function<std::string(State<int, std::string> *, int)> *);
+	void setAsStartState();
 };
 
 
@@ -51,6 +50,9 @@ public:
 template <typename inT, typename outT>
 State<inT, outT>::State()
 {
+	iKey = -1;
+	sName = "";
+	isStartState = false;
 	std::cout << "Constructor" << std::endl;
 }
 
@@ -98,6 +100,12 @@ void State<inT, outT>::setFunction(std::function<std::string(State<int, std::str
 		pFunc = func;
 	else
 		std::cerr << "The state is locked. You should not modify the state after FSM running." << std::endl;
+}
+
+template <typename inT, typename outT>
+void State<inT, outT>::setAsStartState()
+{
+	isStartState = true;
 }
 
 template <typename inT, typename outT>

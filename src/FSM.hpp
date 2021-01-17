@@ -22,12 +22,13 @@ private: // Setting the next state
 	void convertNameToKey(std::string name);
 	void setNextStateByName(std::string name);
 
-public:
+public: // Initialization related
 	FSM();
 	~FSM();
+	void addState(State<inT, outT> *state);
 
 public:
-	void addState(State<inT, outT>* state);
+	outT operator()(inT input);
 };
 
 /*
@@ -40,6 +41,7 @@ template <typename inT, typename outT>
 FSM<inT, outT>::FSM()
 {
 	isLocked = false;
+	pCurrState = nullptr;
 }
 
 /*
@@ -72,10 +74,32 @@ void FSM<inT, outT>::addState(State<inT, outT>* pstate)
 		std::cerr << "Adding same State multiple times." << std::endl;
 		throw("[FSM] Multiple addition of State instance");
 	}
-	
+
 	pstate->isLocked = true;
 	pstate->iKey = (int)vpState.size();
 	vpState.push_back(pstate);
+	if (pstate->isStartState)
+		pCurrState = pstate;
+}
+
+/*
+ * sets the next State by key
+ * 
+ * the key value is the index in the State vector.
+ * Check the index bound and change the current State
+ * 
+ * @param integer value of key
+ * @return void / prints out error if out of bounds
+ */
+template <typename inT, typename outT>
+outT FSM<inT, outT>::operator()(inT input)
+{
+	if (pCurrState == nullptr)
+	{
+		std::cerr << "There was no start State given. Add a start State." << std::endl;
+		throw("No start State error");
+	}
+	return pCurrState->giveInput(input);
 }
 
 /*
