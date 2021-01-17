@@ -54,7 +54,8 @@ FSM_Moore<inT, outT>::~FSM_Moore()
 * operator() for FSM
 * 
 * passes the input to pCurrState
-* TODO: change the state accordingly
+* 1. Gets result
+* 2. Gets next state
 * 
 * @param input value of type inT
 * @return output of type outT
@@ -76,7 +77,7 @@ outT FSM_Moore<inT, outT>::operator()(inT input)
 	outT result = this->pCurrState->getOutput(input);
 	std::string sNextName = this->pCurrState->pTransFunc->operator()(input);
 
-	FSM<inT, outT>::template setNextStateByName(sNextName);
+	this->setNextStateByName(sNextName);
 	return  result;
 }
 
