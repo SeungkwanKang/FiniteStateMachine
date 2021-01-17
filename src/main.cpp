@@ -78,9 +78,10 @@ int main(int argc, char *argv[])
 
 
 	std::cout << fsm(-3) << std::endl;
-	std::cout << fsm(-2) << std::endl;
+	std::cout << fsm(2) << std::endl;
 	std::cout << fsm(-1) << std::endl;
 	std::cout << fsm(3) << std::endl;
+	std::cout << fsm(0) << std::endl;
 
 	return 0;
 }

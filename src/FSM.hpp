@@ -162,6 +162,7 @@ void FSM<inT, outT>::setNextStateByName(std::string name)
 		if (name == vpState[key]->sName)
 		{
 			setNextStateByKey(key);
+			return;
 		}
 	}
 	std::cerr << "There is no State with such name." << std::endl;

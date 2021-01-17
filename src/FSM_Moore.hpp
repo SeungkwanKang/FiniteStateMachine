@@ -74,11 +74,8 @@ outT FSM_Moore<inT, outT>::operator()(inT input)
 		throw("[FSM] No tranfer function error");
 	}
 
-	outT result = this->pCurrState->getOutput(input);
-	std::string sNextName = this->pCurrState->pTransFunc->operator()(input);
-
-	this->setNextStateByName(sNextName);
-	return  result;
+	this->setNextStateByName(this->pCurrState->pTransFunc->operator()(input));
+	return this->pCurrState->getOutput(input);
 }
 
 #endif // INCLUDE_FSM_MOORE_H_
