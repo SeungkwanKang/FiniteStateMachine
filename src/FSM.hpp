@@ -11,6 +11,9 @@ class FSM
 	friend State<inT, outT>;
 
 private:
+	bool isLocked;
+
+private:
 	State<inT, outT>* pCurrState;
 	std::vector<State<inT, outT> *> vpState;
 
@@ -19,9 +22,61 @@ private: // Setting the next state
 	void convertNameToKey(std::string name);
 	void setNextStateByName(std::string name);
 
-public : FSM();
+public:
+	FSM();
 	~FSM();
+
+public:
+	void addState(State<inT, outT>* state);
 };
+
+/*
+ * Constructor of FSM class
+ * 
+ * A templated FSM class constructor.
+ * Template holds the input and output type.
+ */
+template <typename inT, typename outT>
+FSM<inT, outT>::FSM()
+{
+	isLocked = false;
+}
+
+/*
+ * Deconstructor of FSM class
+ * 
+ * A templated FSM class constructor.
+ * Template holds the input and output type.
+ */
+template <typename inT, typename outT>
+FSM<inT, outT>::~FSM()
+{
+}
+
+/*
+ * adds new State to FSM
+ * 
+ * @param pointer to the new State
+ * @return void / throws error if locked
+ */
+template <typename inT, typename outT>
+void FSM<inT, outT>::addState(State<inT, outT>* pstate)
+{
+	if (isLocked)
+	{ // Modification after lock
+		std::cerr << "FSM is locked. Do not modify FSM after it's running." << std::endl;
+		throw("[FSM] Modify after lock error");
+	}
+	if (pstate->iKey != -1)
+	{ // Addind same state again
+		std::cerr << "Adding same State multiple times." << std::endl;
+		throw("[FSM] Multiple addition of State instance");
+	}
+	
+	pstate->isLocked = true;
+	pstate->iKey = (int)vpState.size();
+	vpState.push_back(pstate);
+}
 
 /*
  * sets the next State by key
