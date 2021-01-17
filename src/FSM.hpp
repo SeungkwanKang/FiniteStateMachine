@@ -23,6 +23,7 @@ protected:
 protected:
 	State<inT, outT>* pCurrState;
 	std::vector<State<inT, outT> *> vpState;
+	bool checkDuplicateStateName(std::string name);
 
 protected: // Setting the next state
 	void setNextStateByKey(int key);
@@ -94,6 +95,11 @@ void FSM<inT, outT>::addState(State<inT, outT>* pstate)
 		std::cerr << "No name given for State." << std::endl;
 		throw("[FMS] Received no-name State instance");
 	}
+	if (checkDuplicateStateName(pstate->sName))
+	{ // Duplicate name
+		std::cerr << "Duplicate name for State." << std::endl;
+		throw("[FMS] Received duplicate State instance");
+	}
 
 	pstate->isLocked = true;
 	pstate->iKey = (int)vpState.size();
@@ -108,6 +114,15 @@ void FSM<inT, outT>::addState(State<inT, outT>* pstate)
 			throw("[FSM] Received multiple start states");
 		}
 	}
+}
+
+/*
+ * TODO
+ */
+template <typename inT, typename outT>
+bool FSM<inT, outT>::checkDuplicateStateName(std::string name)
+{
+	return false;
 }
 
 /*
