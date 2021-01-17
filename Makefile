@@ -3,23 +3,24 @@ CFLAGS:=-g -Wall -Werror --std=c++17
 IN_CPP_DIR:=src
 OUT_O_DIR:=build
 
-programs= \
-	FSM.o \
-	State.o
+headers= \
+	FSM.hpp \
+	FSM_Moore.hpp \
+	FSM_Mealy.hpp \
+	State.hpp \
+	State_Moore.hpp \
+	State_Mealy.hpp
 
-results=$(addprefix $(OUT_O_DIR)/,$(programs))
+headerPaths=$(addprefix $(IN_CPP_DIR)/,$(headers))
 
 all: manual.pdf $(OUT_O_DIR)/main
 
 manual.pdf:
 	$(MAKE) -C manual
 
-$(OUT_O_DIR)/main: $(IN_CPP_DIR)/main.cpp $(results)
-	$(CC) $(CFLAGS) $^ -o $@
-
-$(OUT_O_DIR)/%.o: $(IN_CPP_DIR)/%.cpp
+$(OUT_O_DIR)/main: $(IN_CPP_DIR)/main.cpp $(headerPaths)
 	mkdir -p $(OUT_O_DIR)
-	$(CC) $(CFLAGS) -c $< -o $@
+	$(CC) $(CFLAGS) $< -o $@
 
 clean:
 	rm -rf $(OUT_O_DIR)
