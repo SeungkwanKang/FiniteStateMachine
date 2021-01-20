@@ -35,7 +35,7 @@ public: // Initialization related
 	void addState(State<inT, outT> *state);
 
 public: // Execution related
-	virtual outT operator()(inT input) = 0;
+	outT operator()(inT input);
 };
 
 /*
@@ -114,6 +114,36 @@ void FSM<inT, outT>::addState(State<inT, outT>* pstate)
 			throw("[FSM] Received multiple start states");
 		}
 	}
+}
+
+/*
+* operator() for FSM
+* 
+* passes the input to pCurrState
+* 1. Gets result
+* 2. Gets next state
+* 
+* TODO: Check for termination
+* 
+* @param input value of type inT
+* @return output of type outT
+*/
+template <typename inT, typename outT>
+outT FSM<inT, outT>::operator()(inT input)
+{
+	if (this->pCurrState == nullptr)
+	{
+		std::cerr << "There was no start State given. Add a start State." << std::endl;
+		throw("[FSM] No start State error");
+	}
+	if (this->pCurrState->pTransFunc == nullptr)
+	{
+		std::cerr << "There was no transfer function given." << std::endl;
+		throw("[FSM] No tranfer function error");
+	}
+
+	this->setNextStateByName(this->pCurrState->pTransFunc->operator()(input));
+	return this->pCurrState->getOutput(input);
 }
 
 /*
