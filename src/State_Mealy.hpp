@@ -43,7 +43,7 @@ public:
 template <typename inT, typename outT>
 void State_Mealy<inT, outT>::setOutputFunction(std::function<outT(inT)> *pfunc)
 {
-	if (!this->isLocked)
+	if (!(this->isLocked))
 		pOutFunc = pfunc;
 	else
 	{
