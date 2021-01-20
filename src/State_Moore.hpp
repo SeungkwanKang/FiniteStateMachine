@@ -22,9 +22,6 @@ class State_Moore : public State<inT, outT>
 
 private:
 	outT oOutput;
-
-private:
-	std::function<outT(State<inT, outT> *)> *pOutFunc;
 	outT getOutput(inT input);
 	
 public:
@@ -53,7 +50,7 @@ void State_Moore<inT, outT>::setOutput(outT output)
 }
 
 /*
- * giveInput of State_Moore class
+ * getOutput of State_Moore class
  * gets the input and returns the output
  * 
  * Moore Machine's output is independent to input.
